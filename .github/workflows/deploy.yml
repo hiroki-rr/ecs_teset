@@ -8,7 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env: 
+      AWS_DEFAULT_REGION: ap-northeast-1
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -22,7 +24,6 @@ jobs:
         ECR_REGISTRY: 298125159991.dkr.ecr.ap-northeast-1.amazonaws.com  # 例: 123456789012.dkr.ecr.us-west-1.amazonaws.com
         ECR_REPOSITORY: ecstest  # 例: my-fastapi-app
         IMAGE_TAG: ${{ github.sha }}
-        AWS_DEFAULT_REGION: ap-northeast-1
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
