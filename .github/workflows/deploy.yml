@@ -38,7 +38,7 @@ jobs:
     - name: Deploy to ECS
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ecstest  # 例: my-fastapi-task
+        task-definition: 'task-definition-name:ecstest'  # 例: my-fastapi-task
         service: ecs-test-service  # 例: my-fastapi-service
         cluster: ecs-test  # 例: default
         force-new-deployment: true
