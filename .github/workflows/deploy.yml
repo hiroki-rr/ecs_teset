@@ -30,9 +30,9 @@ jobs:
       env:
         ECR_REGISTRY: 298125159991.dkr.ecr.ap-northeast-1.amazonaws.com
         ECR_REPOSITORY: ecstest
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: latest  # イメージのタグをlatestに変更
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .  # キャッシュを無効にしてビルド
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     - name: Deploy to ECS
