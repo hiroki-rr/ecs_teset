@@ -8,5 +8,5 @@ def read_root():
 
 @app.get("/version")
 def get_version():
-    return {"version": "1.0", "message": "This is a new change for testing auto-deployment!"}
+    return {"version": "1.1", "message": "This is a new change for testing auto-deployment!"}
 
