@@ -1,0 +1,36 @@
+name: Deploy to AWS Fargate
+
+on:
+  push:
+    branches:
+      - main  # mainブランチへのpush時にデプロイする場合
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: <ECR_REGISTRY_URL>
+        ECR_REPOSITORY: <REPOSITORY_NAME>
+        IMAGE_TAG: latest  # or ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # 以下のステップはECSサービスの更新をトリガーする場合に使用します
+    - name: Deploy to Fargate
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: path_to_task_definition.json
+        service: service_name
+        cluster: cluster_name
+        force-new-deployment: true
